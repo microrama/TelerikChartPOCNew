@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart" xmlns:local="clr-namespace:TelerikChartPOC"
+             x:Class="TelerikChartPOC.VitalTrendViewFirstCut">
+  <ContentView.Content>
+      <StackLayout>
+            <telerikChart:RadCartesianChart  x:Name="chart1" HeightRequest="300" Margin="20"
+                                             PanOffset="{Binding ChartPanOffset}" 
+                                             MaxZoom="2, 1" Zoom="2, 1" 
+                                             NativeControlLoaded="chart1_NativeControlLoaded" NativeControlUnloaded="chart1_NativeControlUnloaded">
+                <!--<telerikChart:RadCartesianChart.BindingContext>
+                    <local:ViewModel1 />
+                </telerikChart:RadCartesianChart.BindingContext>-->
+                <telerikChart:RadCartesianChart.HorizontalAxis>
+                    <telerikChart:DateTimeContinuousAxis  x:Name="xaxis" LabelFitMode="Rotate"
+                                                 MajorStep="4"
+                                                 MajorStepUnit="Hour" 
+                                                 LabelFormat="HH:mm"
+                                                 GapLength="1"
+                                                 PlotMode="BetweenTicks"
+                                                 Maximum="{Binding MaxChartDate}"
+                                                 Minimum="{Binding MinChartDate}"/>
+                </telerikChart:RadCartesianChart.HorizontalAxis>
+                <telerikChart:RadCartesianChart.VerticalAxis>
+                    <telerikChart:NumericalAxis Minimum="-1.5"
+                                        Maximum="1.5" />
+                </telerikChart:RadCartesianChart.VerticalAxis>
+                <telerikChart:RadCartesianChart.Series>
+                    <telerikChart:LineSeries ValueBinding="Value"
+                                     CategoryBinding="Date"
+                                     ItemsSource="{Binding Data}"
+                                     LabelFormat="{}{0:N1}"
+                                     />
+                </telerikChart:RadCartesianChart.Series>
+                <telerikChart:RadCartesianChart.ChartBehaviors>
+                    <telerikChart:ChartPanAndZoomBehavior ZoomMode="Horizontal" 
+                                              PanMode="Horizontal" 
+                                              HandleDoubleTap="True"/>
+                    <telerikChart:ChartTooltipBehavior TriggerMode="Tap" />
+                </telerikChart:RadCartesianChart.ChartBehaviors>
+            </telerikChart:RadCartesianChart>
+        </StackLayout>
+  </ContentView.Content>
+</ContentView>
