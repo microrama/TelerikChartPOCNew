@@ -15,7 +15,7 @@ namespace TelerikChartPOC
         private IVitalTrendView _view;
 
         public VitalTrendVM(IVitalTrendView view, TrendType trendType, ObservableCollection<ChartDataPoint> chartData,
-            DateTime minChartDate, DateTime maxChartDate,
+            DateTime minChartDate, DateTime maxChartDate, double minYValue, double maxYValue,
             Action<TrendType, Point, Size> returnAction = null)
         {
             _view = view;
@@ -24,6 +24,8 @@ namespace TelerikChartPOC
             this.ChartData = chartData;
             this.MinChartDate = minChartDate;
             this.MaxChartDate = maxChartDate;
+            this.MinChartYValue = minYValue;
+            this.MaxChartYValue = maxYValue;
         }
 
         #region Properties 
@@ -35,6 +37,11 @@ namespace TelerikChartPOC
         public DateTime MaxChartDate { get; set; }
 
         public DateTime MinChartDate { get; set; }
+
+        public double MaxChartYValue { get; set; }
+
+        public double MinChartYValue { get; set; }
+
 
         private Point _panOffset = new Point(0,0);
         public Point PanOffset

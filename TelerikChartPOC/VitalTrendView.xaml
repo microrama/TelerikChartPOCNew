@@ -21,7 +21,7 @@
                                                  Minimum="{Binding MinChartDate}"/>
             </telerikChart:RadCartesianChart.HorizontalAxis>
             <telerikChart:RadCartesianChart.VerticalAxis>
-                <telerikChart:NumericalAxis/>
+                <telerikChart:NumericalAxis Minimum="{Binding MinChartYValue}" Maximum="{Binding MaxChartYValue}"/>
             </telerikChart:RadCartesianChart.VerticalAxis>
             <telerikChart:RadCartesianChart.Series>
                 <telerikChart:LineSeries ValueBinding="Value"
