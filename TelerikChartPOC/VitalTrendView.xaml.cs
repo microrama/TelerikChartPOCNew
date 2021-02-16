@@ -32,7 +32,14 @@ namespace TelerikChartPOC
             // In future, we can set it in XAML when this bug is fixed
             // https://www.telerik.com/account/support-tickets/view-ticket/1507202
             await Task.Delay(100);
-            chart.PanOffset = new Point(-(chart.Width * chart.Zoom.Width), 0);
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                chart.PanOffset = new Point(-(chart.Width * chart.Zoom.Width), 0);
+            }
+            else if (Device.RuntimePlatform == Device.iOS)
+            {
+                chart.PanOffset = new Point(340000, 0);
+            }   
         }
 
         private void chart_NativeControlUnloaded(object sender, EventArgs e)

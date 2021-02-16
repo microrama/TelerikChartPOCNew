@@ -53,5 +53,6 @@
                 <telerikchartpoc:PanOffsetInitEffect ZoomLevel="8" PanXOffset_Android="-1000" NormalizedPan_iOS="-1000"/>
             </telerikChart:RadCartesianChart.Effects>-->
         </telerikChart:RadCartesianChart>
+
     </ContentView.Content>
 </ContentView>
