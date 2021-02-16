@@ -54,12 +54,12 @@ namespace TelerikChartPOC
         {
             // Get Temp Trend Data, create a VitalTrendVM that Temp Vital ContentView will bind to 
             var tempTuple = GetDateTimeData(100, TrendType.Temp);
-            TempVitalTrendVM = new VitalTrendVM(TempTrendView, TrendType.Temp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, UpdatePanZoomForAllCharts);
+            TempVitalTrendVM = new VitalTrendVM(TempTrendView, TrendType.Temp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
             trendVmList.Add(TempVitalTrendVM);
 
             // Get Temp Trend Data, create a VitalTrendVM that Temp Vital ContentView will bind to 
             tempTuple = GetDateTimeData(100, TrendType.Resp);
-            RespVitalTrendVM = new VitalTrendVM(RespTrendView, TrendType.Resp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, UpdatePanZoomForAllCharts);
+            RespVitalTrendVM = new VitalTrendVM(RespTrendView, TrendType.Resp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
             trendVmList.Add(RespVitalTrendVM);
         }
 
@@ -69,11 +69,12 @@ namespace TelerikChartPOC
         /// <param name="itemsCount"></param>
         /// <param name="trendType"></param>
         /// <returns></returns>
-        private Tuple<ObservableCollection<ChartDataPoint>, DateTime, DateTime, double, double> GetDateTimeData(int itemsCount, TrendType trendType)
+        private Tuple<ObservableCollection<ChartDataPoint>, ObservableCollection<ChartDataPoint>, DateTime, DateTime, double, double> GetDateTimeData(int itemsCount, TrendType trendType)
         {
             var startDate = DateTime.Now;
 
-            ObservableCollection<ChartDataPoint> items = new ObservableCollection<ChartDataPoint>();
+            ObservableCollection<ChartDataPoint> chartData = new ObservableCollection<ChartDataPoint>();
+            ObservableCollection<ChartDataPoint> secondChartData = null;
             var rand = new Random();
 
             // set min & max initial values
@@ -82,12 +83,17 @@ namespace TelerikChartPOC
             for (int i = 0; i < itemsCount; i++)
             {
                 var data = new ChartDataPoint();
+                ChartDataPoint secondData = null;
                 data.Date = startDate.AddHours(-i).AddMinutes((i + rand.Next(1, 30)));
 
-                switch(trendType)
+                switch (trendType)
                 {
                     case TrendType.Temp:
                         data.Value = rand.Next(96, 105);
+
+                        secondData = new ChartDataPoint();
+                        secondData.Value = data.Value - 10;
+                        secondData.Date = data.Date;
                         break;
 
                     case TrendType.Resp:
@@ -99,7 +105,17 @@ namespace TelerikChartPOC
                 minYValue = data.Value < minYValue ? data.Value : minYValue;
                 maxYValue = data.Value > maxYValue ? data.Value : maxYValue;
 
-                items.Add(data);
+                chartData.Add(data);
+
+                if(secondData != null)
+                {
+                    if(secondChartData == null)
+                    {
+                        secondChartData = new ObservableCollection<ChartDataPoint>();
+                    }
+                    secondChartData.Add(secondData);
+                }
+                    
             }
 
             // Create a Max chart point Date + some hours (to the hour) from the data for the X-Axis
@@ -107,11 +123,11 @@ namespace TelerikChartPOC
             var maxChartDate = new DateTime(date.Year, date.Month, date.Day, date.Hour, 0, 0);
 
             // Create a Min Chart Point Date - some hours (to the hour) from the data for the X-Axis
-            date = items[items.Count - 1].Date.AddHours(-4); 
+            date = chartData[chartData.Count - 1].Date.AddHours(-4); 
             var minChartDate = new DateTime(date.Year, date.Month, date.Day, date.Hour, 0, 0);
 
             // return mock data
-            return new Tuple<ObservableCollection<ChartDataPoint>, DateTime, DateTime, double, double>(items, minChartDate, maxChartDate, minYValue - 10, maxYValue + 10);
+            return new Tuple<ObservableCollection<ChartDataPoint>, ObservableCollection<ChartDataPoint>, DateTime, DateTime, double, double>(chartData, secondChartData, minChartDate, maxChartDate, minYValue - 20, maxYValue + 20);
         }
 
     }

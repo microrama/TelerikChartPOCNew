@@ -14,7 +14,8 @@ namespace TelerikChartPOC
         private Action<TrendType, Point, Size> _notifyParentCallback;
         private IVitalTrendView _view;
 
-        public VitalTrendVM(IVitalTrendView view, TrendType trendType, ObservableCollection<ChartDataPoint> chartData,
+        public VitalTrendVM(IVitalTrendView view, TrendType trendType, 
+            ObservableCollection<ChartDataPoint> chartData, ObservableCollection<ChartDataPoint> secondChartData,
             DateTime minChartDate, DateTime maxChartDate, double minYValue, double maxYValue,
             Action<TrendType, Point, Size> returnAction = null)
         {
@@ -22,6 +23,7 @@ namespace TelerikChartPOC
             _notifyParentCallback = returnAction;
             this.TrendType = trendType;
             this.ChartData = chartData;
+            this.SecondChartData = secondChartData;
             this.MinChartDate = minChartDate;
             this.MaxChartDate = maxChartDate;
             this.MinChartYValue = minYValue;
@@ -34,6 +36,8 @@ namespace TelerikChartPOC
 
         public ObservableCollection<ChartDataPoint> ChartData { get; set; }
 
+        public ObservableCollection<ChartDataPoint> SecondChartData { get; set; }
+
         public DateTime MaxChartDate { get; set; }
 
         public DateTime MinChartDate { get; set; }
@@ -42,21 +46,22 @@ namespace TelerikChartPOC
 
         public double MinChartYValue { get; set; }
 
+        public Point PanOffset1 { get; set; } = new Point(-1000, 0);
 
-        private Point _panOffset = new Point(0,0);
-        public Point PanOffset
-        {
-            get => _panOffset;
-            set
-            {
-                if(_panOffset != value)
-                {
-                    _panOffset = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PanOffset)));
-                }
-                
-            }
-        }
+        //private Point _panOffset = new Point(0,0);
+        //public Point PanOffset
+        //{
+        //    get => _panOffset;
+        //    set
+        //    {
+        //        if(_panOffset != value)
+        //        {
+        //            _panOffset = value;
+        //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PanOffset)));
+        //        }
+
+        //    }
+        //}
 
         private Size _zoom = new Size(2,1);
         public Size Zoom

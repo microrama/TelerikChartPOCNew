@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
+             xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart" xmlns:telerikchartpoc="clr-namespace:TelerikChartPOC"
              x:Class="TelerikChartPOC.VitalTrendView">
     <ContentView.Content>
-        <telerikChart:RadCartesianChart  x:Name="chart" HeightRequest="200"
-                                        MaxZoom="4, 2" Zoom="2,1"
+        <telerikChart:RadCartesianChart  x:Name="chart" HeightRequest="200" PanOffset="{Binding PanOffset1}"
+                                        MaxZoom="16, 1" Zoom="8,1"
                                         NativeControlLoaded="chart_NativeControlLoaded" NativeControlUnloaded="chart_NativeControlUnloaded">
             <!--<telerikChart:RadCartesianChart.BindingContext>
                     <local:ViewModel1 />
                 </telerikChart:RadCartesianChart.BindingContext>-->
             <telerikChart:RadCartesianChart.HorizontalAxis>
                 <telerikChart:DateTimeContinuousAxis 
-                                                 MajorStep="4"
+                                                 MajorStep="1"
                                                  MajorStepUnit="Hour" 
                                                  LabelFormat="HH:mm"
-                                                 GapLength="1"
+                                                 GapLength="0.1"
                                                  PlotMode="BetweenTicks"
                                                  Maximum="{Binding MaxChartDate}"
                                                  Minimum="{Binding MinChartDate}"/>
@@ -24,10 +24,17 @@
                 <telerikChart:NumericalAxis Minimum="{Binding MinChartYValue}" Maximum="{Binding MaxChartYValue}"/>
             </telerikChart:RadCartesianChart.VerticalAxis>
             <telerikChart:RadCartesianChart.Series>
-                <telerikChart:LineSeries ValueBinding="Value"
+                <telerikChart:SplineSeries ValueBinding="Value"
                                      CategoryBinding="Date"
                                      ItemsSource="{Binding ChartData}"
                                      LabelFormat="{}{0:N1}"
+                                           ShowLabels="True"
+                                     />
+                <telerikChart:SplineSeries ValueBinding="Value"
+                                     CategoryBinding="Date"
+                                     ItemsSource="{Binding SecondChartData}"
+                                     LabelFormat="{}{0:N1}"
+                                           ShowLabels="True"
                                      />
             </telerikChart:RadCartesianChart.Series>
             <telerikChart:RadCartesianChart.ChartBehaviors>
@@ -42,7 +49,9 @@
                                              MajorLinesVisibility="XY"
                                              MajorLineThickness="1" />
             </telerikChart:RadCartesianChart.Grid>
-            
+            <!--<telerikChart:RadCartesianChart.Effects>
+                <telerikchartpoc:PanOffsetInitEffect ZoomLevel="8" PanXOffset_Android="-1000" NormalizedPan_iOS="-1000"/>
+            </telerikChart:RadCartesianChart.Effects>-->
         </telerikChart:RadCartesianChart>
     </ContentView.Content>
 </ContentView>

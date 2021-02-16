@@ -23,9 +23,16 @@ namespace TelerikChartPOC
             InitializeComponent();
         }
 
-        private void chart_NativeControlLoaded(object sender, EventArgs e)
+        private async void chart_NativeControlLoaded(object sender, EventArgs e)
         {
             chart.PropertyChanged += Chart_PropertyChanged;
+
+            // Ideally, setting the PanOffset in XAML should have worked but that is a bug per Telerik Support
+            // We have to wait a bit for the rendering to complete before setting it would take effect.
+            // In future, we can set it in XAML when this bug is fixed
+            // https://www.telerik.com/account/support-tickets/view-ticket/1507202
+            await Task.Delay(100);
+            chart.PanOffset = new Point(-(chart.Width * chart.Zoom.Width), 0);
         }
 
         private void chart_NativeControlUnloaded(object sender, EventArgs e)
@@ -79,5 +86,6 @@ namespace TelerikChartPOC
         }
 
         #endregion
+
     }
 }
