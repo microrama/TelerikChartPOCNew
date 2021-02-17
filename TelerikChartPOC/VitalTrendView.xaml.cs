@@ -26,6 +26,7 @@ namespace TelerikChartPOC
         private async void chart_NativeControlLoaded(object sender, EventArgs e)
         {
             chart.PropertyChanged += Chart_PropertyChanged;
+            chart.PropertyChanging += Chart_PropertyChanging;
 
             // Ideally, setting the PanOffset in XAML should have worked but that is a bug per Telerik Support
             // We have to wait a bit for the rendering to complete before setting it would take effect.
@@ -42,14 +43,20 @@ namespace TelerikChartPOC
             }   
         }
 
+        private void Chart_PropertyChanging(object sender, PropertyChangingEventArgs e)
+        {
+            Debug.WriteLine($"Changing -- {e.PropertyName}");
+        }
+
         private void chart_NativeControlUnloaded(object sender, EventArgs e)
         {
             chart.PropertyChanged -= Chart_PropertyChanged;
+            chart.PropertyChanging -= Chart_PropertyChanging;
         }
 
         private void Chart_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            Debug.WriteLine($"{e.PropertyName}");
+            Debug.WriteLine($"Changed -- {e.PropertyName}");
             var trendVM = this.BindingContext as VitalTrendVM;
 
             if (e.PropertyName == "Zoom")
@@ -94,5 +101,14 @@ namespace TelerikChartPOC
 
         #endregion
 
+        private void chart_Focused(object sender, FocusEventArgs e)
+        {
+            Debug.WriteLine($"focused");
+        }
+
+        private void chart_Unfocused(object sender, FocusEventArgs e)
+        {
+            Debug.WriteLine($"unfocused");
+        }
     }
 }

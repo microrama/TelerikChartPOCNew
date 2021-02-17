@@ -28,11 +28,40 @@ namespace TelerikChartPOC
             this.MaxChartDate = maxChartDate;
             this.MinChartYValue = minYValue;
             this.MaxChartYValue = maxYValue;
+
+            switch(this.TrendType)
+            {
+                case TrendType.Temp:
+                    this.TrendName = "Temperature";
+                    break;
+
+                case TrendType.Pulse:
+                    this.TrendName = "Pulse";
+                    break;
+
+                case TrendType.BP:
+                    this.TrendName = "Blood Pressure";
+                    break;
+
+                case TrendType.Pain:
+                    this.TrendName = "Blood Pressure";
+                    break;
+
+                case TrendType.Resp:
+                    this.TrendName = "Respiratory Rate";
+                    break;
+
+                case TrendType.O2:
+                    this.TrendName = "O2 Saturation";
+                    break;
+            }
         }
 
         #region Properties 
 
         public TrendType TrendType { get; set; }
+
+        public string TrendName { get; set; }
 
         public ObservableCollection<ChartDataPoint> ChartData { get; set; }
 
@@ -45,8 +74,6 @@ namespace TelerikChartPOC
         public double MaxChartYValue { get; set; }
 
         public double MinChartYValue { get; set; }
-
-        public Point PanOffset1 { get; set; } = new Point(-1000, 0);
 
         //private Point _panOffset = new Point(0,0);
         //public Point PanOffset

@@ -4,14 +4,34 @@
              xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart" xmlns:telerikchartpoc="clr-namespace:TelerikChartPOC"
              x:Class="TelerikChartPOC.VitalTrendView">
     <ContentView.Content>
-        <telerikChart:RadCartesianChart  x:Name="chart" HeightRequest="200" PanOffset="{Binding PanOffset1}"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- TMAX element-->
+            <Label  Grid.Row="0" Text="TMAX 76" TextColor="White" BackgroundColor="DarkBlue"/>
+            
+            <!-- Temperature -->
+            <Label Grid.Row="1" Text="{Binding TrendName}" FontSize="Large" FontAttributes="Bold"/>
+
+            <!-- Graph and Max Value Card-->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <telerikChart:RadCartesianChart x:Name="chart" Grid.Column="0"
+                                            HeightRequest="200"  Focused="chart_Focused" Unfocused="chart_Unfocused"
                                         MaxZoom="16, 1" Zoom="8,1"
                                         NativeControlLoaded="chart_NativeControlLoaded" NativeControlUnloaded="chart_NativeControlUnloaded">
-            <!--<telerikChart:RadCartesianChart.BindingContext>
+                    <!--<telerikChart:RadCartesianChart.BindingContext>
                     <local:ViewModel1 />
                 </telerikChart:RadCartesianChart.BindingContext>-->
-            <telerikChart:RadCartesianChart.HorizontalAxis>
-                <telerikChart:DateTimeContinuousAxis 
+                    <telerikChart:RadCartesianChart.HorizontalAxis>
+                        <telerikChart:DateTimeContinuousAxis 
                                                  MajorStep="1"
                                                  MajorStepUnit="Hour" 
                                                  LabelFormat="HH:mm"
@@ -19,40 +39,50 @@
                                                  PlotMode="BetweenTicks"
                                                  Maximum="{Binding MaxChartDate}"
                                                  Minimum="{Binding MinChartDate}"/>
-            </telerikChart:RadCartesianChart.HorizontalAxis>
-            <telerikChart:RadCartesianChart.VerticalAxis>
-                <telerikChart:NumericalAxis Minimum="{Binding MinChartYValue}" Maximum="{Binding MaxChartYValue}"/>
-            </telerikChart:RadCartesianChart.VerticalAxis>
-            <telerikChart:RadCartesianChart.Series>
-                <telerikChart:SplineSeries ValueBinding="Value"
+                    </telerikChart:RadCartesianChart.HorizontalAxis>
+                    <telerikChart:RadCartesianChart.VerticalAxis>
+                        <telerikChart:NumericalAxis Minimum="{Binding MinChartYValue}" Maximum="{Binding MaxChartYValue}"/>
+                    </telerikChart:RadCartesianChart.VerticalAxis>
+                    <telerikChart:RadCartesianChart.Series>
+                        <telerikChart:SplineSeries ValueBinding="Value"
                                      CategoryBinding="Date"
                                      ItemsSource="{Binding ChartData}"
                                      LabelFormat="{}{0:N1}"
                                            ShowLabels="True"
                                      />
-                <telerikChart:SplineSeries ValueBinding="Value"
+                        <telerikChart:SplineSeries ValueBinding="Value"
                                      CategoryBinding="Date"
                                      ItemsSource="{Binding SecondChartData}"
                                      LabelFormat="{}{0:N1}"
                                            ShowLabels="True"
                                      />
-            </telerikChart:RadCartesianChart.Series>
-            <telerikChart:RadCartesianChart.ChartBehaviors>
-                <telerikChart:ChartPanAndZoomBehavior ZoomMode="Horizontal" 
+                    </telerikChart:RadCartesianChart.Series>
+                    <telerikChart:RadCartesianChart.ChartBehaviors>
+                        <telerikChart:ChartPanAndZoomBehavior ZoomMode="Horizontal" 
                                               PanMode="Horizontal" 
                                               HandleDoubleTap="True"/>
-                <telerikChart:ChartTooltipBehavior TriggerMode="Tap" />
-            </telerikChart:RadCartesianChart.ChartBehaviors>
+                        <telerikChart:ChartTooltipBehavior TriggerMode="Tap" />
+                    </telerikChart:RadCartesianChart.ChartBehaviors>
 
-            <telerikChart:RadCartesianChart.Grid>
-                <telerikChart:CartesianChartGrid StripLinesVisibility="Y"
+                    <telerikChart:RadCartesianChart.Grid>
+                        <telerikChart:CartesianChartGrid StripLinesVisibility="Y"
                                              MajorLinesVisibility="XY"
                                              MajorLineThickness="1" />
-            </telerikChart:RadCartesianChart.Grid>
-            <!--<telerikChart:RadCartesianChart.Effects>
+                    </telerikChart:RadCartesianChart.Grid>
+                    <!--<telerikChart:RadCartesianChart.Effects>
                 <telerikchartpoc:PanOffsetInitEffect ZoomLevel="8" PanXOffset_Android="-1000" NormalizedPan_iOS="-1000"/>
             </telerikChart:RadCartesianChart.Effects>-->
-        </telerikChart:RadCartesianChart>
-
+                </telerikChart:RadCartesianChart>
+                <Grid Grid.Column="1" BackgroundColor="DarkBlue">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Text="Temp" TextColor="White" FontSize="Micro" Margin="5,0,5,0" HorizontalTextAlignment="Center" VerticalTextAlignment="End"/>
+                    <Label Grid.Row="1" Text="105" TextColor="White" FontSize="Large" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Start"/>
+                </Grid>
+            </Grid>
+            
+        </Grid>
     </ContentView.Content>
 </ContentView>

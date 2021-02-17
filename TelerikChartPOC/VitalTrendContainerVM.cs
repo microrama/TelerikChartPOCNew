@@ -10,24 +10,58 @@ namespace TelerikChartPOC
 {
     public class VitalTrendContainerVM : INotifyPropertyChanged
     {
+        private DateTime startDate = DateTime.Now;
+
         #region Properties
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private bool _ScrollEnabled = true;
+        public bool ScrollEnabled
+        {
+            get => _ScrollEnabled;
+            set
+            {
+                if (_ScrollEnabled != value)
+                {
+                    _ScrollEnabled = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ScrollEnabled)));
+                }
+            }
+        }
 
         private List<VitalTrendVM> trendVmList = new List<VitalTrendVM>();
 
         private IVitalTrendView TempTrendView { get; set; }
         public VitalTrendVM TempVitalTrendVM { get; set; }
 
+        private IVitalTrendView PulseTrendView { get; set; }
+        public VitalTrendVM PulseVitalTrendVM { get; set; }
+
+        private IVitalTrendView BPTrendView { get; set; }
+        public VitalTrendVM BPVitalTrendVM { get; set; }
+
+        private IVitalTrendView PainTrendView { get; set; }
+        public VitalTrendVM PainVitalTrendVM { get; set; }
+
         private IVitalTrendView RespTrendView { get; set; }
         public VitalTrendVM RespVitalTrendVM { get; set; }
 
+        private IVitalTrendView O2TrendView { get; set; }
+        public VitalTrendVM O2VitalTrendVM { get; set; }
+
         #endregion
 
-        public VitalTrendContainerVM(IVitalTrendView tempTrendView, IVitalTrendView respTrendView)
+        public VitalTrendContainerVM(IVitalTrendView tempTrendView, IVitalTrendView pulseTrendView,
+            IVitalTrendView bpTrendView, IVitalTrendView painTrendView,
+            IVitalTrendView respTrendView, IVitalTrendView o2TrendView)
         {
             TempTrendView = tempTrendView;
+            PulseTrendView = pulseTrendView;
+            BPTrendView = bpTrendView;
+            PainTrendView = painTrendView;
             RespTrendView = respTrendView;
+            O2TrendView = o2TrendView;
 
             // Get the Data from Network and prepare VMs 
             this.LoadData();
@@ -57,10 +91,25 @@ namespace TelerikChartPOC
             TempVitalTrendVM = new VitalTrendVM(TempTrendView, TrendType.Temp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
             trendVmList.Add(TempVitalTrendVM);
 
-            // Get Temp Trend Data, create a VitalTrendVM that Temp Vital ContentView will bind to 
+            tempTuple = GetDateTimeData(100, TrendType.Pulse);
+            PulseVitalTrendVM = new VitalTrendVM(PulseTrendView, TrendType.Pulse, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            trendVmList.Add(PulseVitalTrendVM);
+
+            tempTuple = GetDateTimeData(100, TrendType.BP);
+            BPVitalTrendVM = new VitalTrendVM(BPTrendView, TrendType.BP, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            trendVmList.Add(BPVitalTrendVM);
+
+            tempTuple = GetDateTimeData(100, TrendType.Pain);
+            PainVitalTrendVM = new VitalTrendVM(PainTrendView, TrendType.Pain, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            trendVmList.Add(PainVitalTrendVM);
+
             tempTuple = GetDateTimeData(100, TrendType.Resp);
             RespVitalTrendVM = new VitalTrendVM(RespTrendView, TrendType.Resp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
             trendVmList.Add(RespVitalTrendVM);
+
+            tempTuple = GetDateTimeData(100, TrendType.O2);
+            O2VitalTrendVM = new VitalTrendVM(O2TrendView, TrendType.O2, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            trendVmList.Add(O2VitalTrendVM);
         }
 
         /// <summary>
@@ -71,8 +120,7 @@ namespace TelerikChartPOC
         /// <returns></returns>
         private Tuple<ObservableCollection<ChartDataPoint>, ObservableCollection<ChartDataPoint>, DateTime, DateTime, double, double> GetDateTimeData(int itemsCount, TrendType trendType)
         {
-            var startDate = DateTime.Now;
-
+           
             ObservableCollection<ChartDataPoint> chartData = new ObservableCollection<ChartDataPoint>();
             ObservableCollection<ChartDataPoint> secondChartData = null;
             var rand = new Random();
@@ -88,7 +136,7 @@ namespace TelerikChartPOC
 
                 switch (trendType)
                 {
-                    case TrendType.Temp:
+                    case TrendType.BP:
                         data.Value = rand.Next(96, 105);
 
                         secondData = new ChartDataPoint();
@@ -97,7 +145,11 @@ namespace TelerikChartPOC
                         break;
 
                     case TrendType.Resp:
-                        data.Value = rand.Next(10, 40);
+                        data.Value = rand.Next(20, 50);
+                        break;
+
+                    default:
+                        data.Value = rand.Next(40, 80);
                         break;
                 }
 
@@ -142,7 +194,11 @@ namespace TelerikChartPOC
     public enum TrendType
     {
         Temp = 1,
-        Resp = 2
+        Pulse,
+        BP,
+        Pain,
+        Resp,
+        O2
     }
 
 }
