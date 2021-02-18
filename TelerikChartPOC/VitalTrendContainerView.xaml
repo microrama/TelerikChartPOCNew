@@ -8,12 +8,19 @@
     <ContentView.Content>
         <ScrollView Orientation="Vertical" Margin="10" IsEnabled="{Binding ScrollEnabled}" Scrolled="ScrollView_Scrolled">
             <StackLayout Orientation="Vertical" Spacing="20" Margin="40,0,40,0">
-                <telerikchartpoc:VitalTrendView x:Name="TempTrend" BindingContext="{Binding TempVitalTrendVM}" Unfocused="TempTrend_Unfocused" Focused="TempTrend_Focused"/>
-                <telerikchartpoc:VitalTrendView x:Name="PulseTrend" BindingContext="{Binding PulseVitalTrendVM}" Unfocused="TempTrend_Unfocused" Focused="TempTrend_Focused"/>
-                <telerikchartpoc:VitalTrendView x:Name="BPTrend" BindingContext="{Binding BPVitalTrendVM}" Unfocused="TempTrend_Unfocused" Focused="TempTrend_Focused"/>
-                <telerikchartpoc:VitalTrendView x:Name="PainTrend" BindingContext="{Binding PainVitalTrendVM}" Unfocused="TempTrend_Unfocused" Focused="TempTrend_Focused"/>
-                <telerikchartpoc:VitalTrendView x:Name="RespTrend" BindingContext="{Binding RespVitalTrendVM}" Unfocused="TempTrend_Unfocused" Focused="TempTrend_Focused"/>
-                <telerikchartpoc:VitalTrendView x:Name="O2Trend" BindingContext="{Binding O2VitalTrendVM}" Unfocused="TempTrend_Unfocused" Focused="TempTrend_Focused"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                </StackLayout.GestureRecognizers>
+                <telerikchartpoc:VitalTrendView x:Name="TempTrend" BindingContext="{Binding TempVitalTrendVM}">
+                    <telerikchartpoc:VitalTrendView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </telerikchartpoc:VitalTrendView.GestureRecognizers>
+                </telerikchartpoc:VitalTrendView>
+                <telerikchartpoc:VitalTrendView x:Name="PulseTrend" BindingContext="{Binding PulseVitalTrendVM}" />
+                <telerikchartpoc:VitalTrendView x:Name="BPTrend" BindingContext="{Binding BPVitalTrendVM}" />
+                <telerikchartpoc:VitalTrendView x:Name="PainTrend" BindingContext="{Binding PainVitalTrendVM}" />
+                <telerikchartpoc:VitalTrendView x:Name="RespTrend" BindingContext="{Binding RespVitalTrendVM}" />
+                <telerikchartpoc:VitalTrendView x:Name="O2Trend" BindingContext="{Binding O2VitalTrendVM}" />
             </StackLayout>
         </ScrollView>
     </ContentView.Content>

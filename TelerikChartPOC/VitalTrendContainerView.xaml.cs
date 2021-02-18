@@ -25,17 +25,17 @@ namespace TelerikChartPOC
 
         private void ScrollView_Scrolled(object sender, ScrolledEventArgs e)
         {
-            Debug.WriteLine($"scrolling.. {e.ScrollX} {e.ScrollY}");
+            //Debug.WriteLine($"scrolling.. {e.ScrollX} {e.ScrollY}");
         }
 
-        private void TempTrend_Unfocused(object sender, FocusEventArgs e)
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
-            Debug.WriteLine($"unfocused");
+            Debug.WriteLine($"telerik tapped");
         }
 
-        private void TempTrend_Focused(object sender, FocusEventArgs e)
+        private void TapGestureRecognizer_Tapped_1(object sender, EventArgs e)
         {
-            Debug.WriteLine($"focused");
+            Debug.WriteLine($"STacklayout tapped");
         }
     }
 }

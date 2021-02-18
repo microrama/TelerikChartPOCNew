@@ -23,6 +23,11 @@ namespace TelerikChartPOC
             InitializeComponent();
         }
 
+        public void EnableParentScrollView(bool enable)
+        {
+            
+        }
+
         private async void chart_NativeControlLoaded(object sender, EventArgs e)
         {
             chart.PropertyChanged += Chart_PropertyChanged;
@@ -37,15 +42,12 @@ namespace TelerikChartPOC
             {
                 chart.PanOffset = new Point(-(chart.Width * chart.Zoom.Width), 0);
             }
-            else if (Device.RuntimePlatform == Device.iOS)
-            {
-                chart.PanOffset = new Point(340000, 0);
-            }   
         }
 
         private void Chart_PropertyChanging(object sender, PropertyChangingEventArgs e)
         {
-            Debug.WriteLine($"Changing -- {e.PropertyName}");
+            var trendVM = this.BindingContext as VitalTrendVM;
+            //Debug.WriteLine($"Changing -- {trendVM.TrendType} {e.PropertyName}");
         }
 
         private void chart_NativeControlUnloaded(object sender, EventArgs e)
@@ -56,8 +58,8 @@ namespace TelerikChartPOC
 
         private void Chart_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            Debug.WriteLine($"Changed -- {e.PropertyName}");
             var trendVM = this.BindingContext as VitalTrendVM;
+            //Debug.WriteLine($"Changed -- {trendVM.TrendType} {e.PropertyName}");
 
             if (e.PropertyName == "Zoom")
             {
@@ -66,7 +68,7 @@ namespace TelerikChartPOC
                     // user is zooming
                     // notify parent VM of these changes on tyhis trend view
                     var chart = sender as RadCartesianChart;
-                    Debug.WriteLine($"{chart.Zoom}  {trendVM.TrendType}");
+                    //Debug.WriteLine($"{chart.Zoom}  {trendVM.TrendType}");
 
                     trendVM.NotifyPanZoomChangeToParent(chart.PanOffset, chart.Zoom);
                 }
@@ -79,7 +81,7 @@ namespace TelerikChartPOC
                 if (sender?.GetType() == typeof(RadCartesianChart))
                 {
                     var chart = sender as RadCartesianChart;
-                    Debug.WriteLine($"{chart.PanOffset}  {trendVM.TrendType}");
+                    //Debug.WriteLine($"{chart.PanOffset}  {trendVM.TrendType}");
 
                     trendVM.NotifyPanZoomChangeToParent(chart.PanOffset, chart.Zoom);
                 }
@@ -101,14 +103,5 @@ namespace TelerikChartPOC
 
         #endregion
 
-        private void chart_Focused(object sender, FocusEventArgs e)
-        {
-            Debug.WriteLine($"focused");
-        }
-
-        private void chart_Unfocused(object sender, FocusEventArgs e)
-        {
-            Debug.WriteLine($"unfocused");
-        }
     }
 }

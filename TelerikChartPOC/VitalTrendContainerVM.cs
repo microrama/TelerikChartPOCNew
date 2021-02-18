@@ -10,7 +10,9 @@ namespace TelerikChartPOC
 {
     public class VitalTrendContainerVM : INotifyPropertyChanged
     {
-        private DateTime startDate = DateTime.Now;
+        private DateTime allChartsEnddDate = DateTime.Now;
+        private DateTime allChartsStartDate = DateTime.MaxValue;
+        private const int numChartDataPoints = 24;
 
         #region Properties
 
@@ -69,6 +71,8 @@ namespace TelerikChartPOC
 
         private void UpdatePanZoomForAllCharts(TrendType updatingTrendType, Point panOffset, Size zoom)
         {
+            ScrollEnabled = false;
+
             trendVmList?.ForEach(trendVM => 
             { 
                 if(trendVM.TrendType != updatingTrendType)
@@ -78,6 +82,24 @@ namespace TelerikChartPOC
                     //trendVM.Zoom = zoom;
                 }
             });
+
+            ScrollEnabled = true;
+        }
+
+        private void EnableScrollView(bool enable)
+        {
+            ScrollEnabled = enable;
+            //if(enable == true)
+            //{
+            //    Task.Run(() => {
+            //        Task.Delay(1000);
+            //        ScrollEnabled = enable;
+            //    });
+            //}
+            //else
+            //{
+            //    ScrollEnabled = enable;
+            //}
         }
 
         /// <summary>
@@ -87,29 +109,37 @@ namespace TelerikChartPOC
         public void LoadData()
         {
             // Get Temp Trend Data, create a VitalTrendVM that Temp Vital ContentView will bind to 
-            var tempTuple = GetDateTimeData(100, TrendType.Temp);
-            TempVitalTrendVM = new VitalTrendVM(TempTrendView, TrendType.Temp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            var tempTuple = GetDateTimeData(numChartDataPoints, TrendType.Temp);
+            TempVitalTrendVM = new VitalTrendVM(TempTrendView, TrendType.Temp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, 
+                UpdatePanZoomForAllCharts, EnableScrollView);
             trendVmList.Add(TempVitalTrendVM);
 
-            tempTuple = GetDateTimeData(100, TrendType.Pulse);
-            PulseVitalTrendVM = new VitalTrendVM(PulseTrendView, TrendType.Pulse, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            tempTuple = GetDateTimeData(numChartDataPoints, TrendType.Pulse);
+            PulseVitalTrendVM = new VitalTrendVM(PulseTrendView, TrendType.Pulse, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts, EnableScrollView);
             trendVmList.Add(PulseVitalTrendVM);
 
-            tempTuple = GetDateTimeData(100, TrendType.BP);
-            BPVitalTrendVM = new VitalTrendVM(BPTrendView, TrendType.BP, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            tempTuple = GetDateTimeData(numChartDataPoints, TrendType.BP);
+            BPVitalTrendVM = new VitalTrendVM(BPTrendView, TrendType.BP, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts, EnableScrollView);
             trendVmList.Add(BPVitalTrendVM);
 
-            tempTuple = GetDateTimeData(100, TrendType.Pain);
-            PainVitalTrendVM = new VitalTrendVM(PainTrendView, TrendType.Pain, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            tempTuple = GetDateTimeData(numChartDataPoints, TrendType.Pain);
+            PainVitalTrendVM = new VitalTrendVM(PainTrendView, TrendType.Pain, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts, EnableScrollView);
             trendVmList.Add(PainVitalTrendVM);
 
-            tempTuple = GetDateTimeData(100, TrendType.Resp);
-            RespVitalTrendVM = new VitalTrendVM(RespTrendView, TrendType.Resp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            tempTuple = GetDateTimeData(numChartDataPoints, TrendType.Resp);
+            RespVitalTrendVM = new VitalTrendVM(RespTrendView, TrendType.Resp, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts, EnableScrollView);
             trendVmList.Add(RespVitalTrendVM);
 
-            tempTuple = GetDateTimeData(100, TrendType.O2);
-            O2VitalTrendVM = new VitalTrendVM(O2TrendView, TrendType.O2, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts);
+            tempTuple = GetDateTimeData(numChartDataPoints, TrendType.O2);
+            O2VitalTrendVM = new VitalTrendVM(O2TrendView, TrendType.O2, tempTuple.Item1, tempTuple.Item2, tempTuple.Item3, tempTuple.Item4, tempTuple.Item5, tempTuple.Item6, UpdatePanZoomForAllCharts, EnableScrollView);
             trendVmList.Add(O2VitalTrendVM);
+
+            TempVitalTrendVM.MinChartDate = new DateTime(allChartsStartDate.Year, allChartsStartDate.Month, allChartsStartDate.Day, allChartsStartDate.Hour, 0, 0);
+            PulseVitalTrendVM.MinChartDate = new DateTime(allChartsStartDate.Year, allChartsStartDate.Month, allChartsStartDate.Day, allChartsStartDate.Hour, 0, 0);
+            BPVitalTrendVM.MinChartDate = new DateTime(allChartsStartDate.Year, allChartsStartDate.Month, allChartsStartDate.Day, allChartsStartDate.Hour, 0, 0);
+            PainVitalTrendVM.MinChartDate = new DateTime(allChartsStartDate.Year, allChartsStartDate.Month, allChartsStartDate.Day, allChartsStartDate.Hour, 0, 0);
+            RespVitalTrendVM.MinChartDate = new DateTime(allChartsStartDate.Year, allChartsStartDate.Month, allChartsStartDate.Day, allChartsStartDate.Hour, 0, 0);
+            O2VitalTrendVM.MinChartDate = new DateTime(allChartsStartDate.Year, allChartsStartDate.Month, allChartsStartDate.Day, allChartsStartDate.Hour, 0, 0);
         }
 
         /// <summary>
@@ -132,7 +162,7 @@ namespace TelerikChartPOC
             {
                 var data = new ChartDataPoint();
                 ChartDataPoint secondData = null;
-                data.Date = startDate.AddHours(-i).AddMinutes((i + rand.Next(1, 30)));
+                data.Date = allChartsEnddDate.AddHours(-i).AddMinutes((i + rand.Next(1, 30)));
 
                 switch (trendType)
                 {
@@ -153,9 +183,15 @@ namespace TelerikChartPOC
                         break;
                 }
 
-                // calculate Min & Max Y value across all data points
+                // calculate Min & Max Y value across all data points for this chart
                 minYValue = data.Value < minYValue ? data.Value : minYValue;
                 maxYValue = data.Value > maxYValue ? data.Value : maxYValue;
+
+                // calculate the min Date for all the charts
+                if(allChartsStartDate > data.Date)
+                {
+                    allChartsStartDate = data.Date;
+                }
 
                 chartData.Add(data);
 
@@ -171,7 +207,7 @@ namespace TelerikChartPOC
             }
 
             // Create a Max chart point Date + some hours (to the hour) from the data for the X-Axis
-            var date = startDate.AddHours(4);
+            var date = allChartsEnddDate.AddHours(4);
             var maxChartDate = new DateTime(date.Year, date.Month, date.Day, date.Hour, 0, 0);
 
             // Create a Min Chart Point Date - some hours (to the hour) from the data for the X-Axis

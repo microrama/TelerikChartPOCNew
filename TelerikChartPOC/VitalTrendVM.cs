@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace TelerikChartPOC
@@ -12,15 +14,18 @@ namespace TelerikChartPOC
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private Action<TrendType, Point, Size> _notifyParentCallback;
+        private Action<bool> _parentScrollAction;
         private IVitalTrendView _view;
 
         public VitalTrendVM(IVitalTrendView view, TrendType trendType, 
             ObservableCollection<ChartDataPoint> chartData, ObservableCollection<ChartDataPoint> secondChartData,
             DateTime minChartDate, DateTime maxChartDate, double minYValue, double maxYValue,
-            Action<TrendType, Point, Size> returnAction = null)
+            Action<TrendType, Point, Size> notifyParentCallback = null, 
+            Action<bool> parentScrollAction = null)
         {
             _view = view;
-            _notifyParentCallback = returnAction;
+            _notifyParentCallback = notifyParentCallback;
+            _parentScrollAction = parentScrollAction;
             this.TrendType = trendType;
             this.ChartData = chartData;
             this.SecondChartData = secondChartData;
@@ -28,6 +33,8 @@ namespace TelerikChartPOC
             this.MaxChartDate = maxChartDate;
             this.MinChartYValue = minYValue;
             this.MaxChartYValue = maxYValue;
+
+            ChartTouch = new Command(ChartTouchHandler);
 
             switch(this.TrendType)
             {
@@ -57,7 +64,15 @@ namespace TelerikChartPOC
             }
         }
 
+        private void ChartTouchHandler(object obj)
+        {
+            Debug.WriteLine($"ChartTouchHandler = {obj}");
+            _parentScrollAction((bool)obj);
+        }
+
         #region Properties 
+
+        public ICommand ChartTouch { get; set; }
 
         public TrendType TrendType { get; set; }
 

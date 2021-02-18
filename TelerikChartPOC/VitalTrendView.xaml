@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart" xmlns:telerikchartpoc="clr-namespace:TelerikChartPOC"
+             xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
+             xmlns:telerikchartpoc="clr-namespace:TelerikChartPOC"
              x:Class="TelerikChartPOC.VitalTrendView">
     <ContentView.Content>
         <Grid>
@@ -24,8 +25,8 @@
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
                 <telerikChart:RadCartesianChart x:Name="chart" Grid.Column="0"
-                                            HeightRequest="200"  Focused="chart_Focused" Unfocused="chart_Unfocused"
-                                        MaxZoom="16, 1" Zoom="8,1"
+                                            HeightRequest="200"
+                                        MaxZoom="16, 1" Zoom="2,1"
                                         NativeControlLoaded="chart_NativeControlLoaded" NativeControlUnloaded="chart_NativeControlUnloaded">
                     <!--<telerikChart:RadCartesianChart.BindingContext>
                     <local:ViewModel1 />
@@ -69,9 +70,11 @@
                                              MajorLinesVisibility="XY"
                                              MajorLineThickness="1" />
                     </telerikChart:RadCartesianChart.Grid>
-                    <!--<telerikChart:RadCartesianChart.Effects>
-                <telerikchartpoc:PanOffsetInitEffect ZoomLevel="8" PanXOffset_Android="-1000" NormalizedPan_iOS="-1000"/>
-            </telerikChart:RadCartesianChart.Effects>-->
+                    <telerikChart:RadCartesianChart.Effects>
+                        <!--<telerikchartpoc:PanOffsetInitEffect ZoomLevel="8" PanXOffset_Android="-1000" NormalizedPan_iOS="-1000"/>-->
+                        <!--Add this attribute to the  telerikChart:RadCartesianChart - telerikchartpoc:PanOffsetInitEffect.Command="{Binding ChartTouch}"-->
+                        <telerikchartpoc:PanEffect />
+                    </telerikChart:RadCartesianChart.Effects>
                 </telerikChart:RadCartesianChart>
                 <Grid Grid.Column="1" BackgroundColor="DarkBlue">
                     <Grid.RowDefinitions>
